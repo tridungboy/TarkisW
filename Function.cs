@@ -212,5 +212,47 @@ namespace TarkisW
                 .Select(p => p.Controls.OfType<MyButton>().SingleOrDefault())
                 .Where(b => b != null);
         }
+
+        public static bool Exists(string a){
+            Panel pn = (Panel)Form1.ActiveForm.Controls.Find("panel1", true).Single();
+            List<Panel> panels = pn.Controls.OfType<Panel>().ToList();
+            List<MyButton> buttonlist = new List<MyButton>();
+            foreach (Panel pans in panels)
+            {
+                List<MyButton> buttons = pans.Controls.OfType<MyButton>().ToList();
+                foreach (MyButton btns in buttons)
+                {
+                    buttonlist.Add(btns);
+                }
+            }
+            
+            
+
+        }
+
+        public static bool Implies(bool a, bool b)
+        {
+            return !a | b;
+        }
+
+        public static bool Bicon(bool a, bool b)
+        {
+            return !(a & b);
+        }
+
+        public static bool And(bool a, bool b)
+        {
+            return a & b;
+        }
+
+        public static bool Or(bool a, bool b)
+        {
+            return a | b;
+        }
+
+        public static bool Not(bool a)
+        {
+            return !a;
+        }
     }
 }
