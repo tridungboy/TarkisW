@@ -335,12 +335,12 @@ namespace TarkisW
         {
             //label1.Text = Function.Square().ToString();
             //label2.Text = Function.Circle().ToString();
-            //label3.Text = Function.Triangle().ToString();
+            //label3.Text = Function.Triangle().ToString(); 
             //label4.Text = Function.RightOf("a", "b").ToString();
-            List<string> Arr = new List<string>();
-            String s = "Square(a) ∧ Small(b) ∨ LeftOf(a,b)";
+            //List<string> Arr = new List<string>();
+            //String s = "(Square(a) ∧ Small(b) ∨ LeftOf(a,b))";
+            String s = textBox1.Text;
             Regex re = new Regex(@"\b(Square|Circle|Triangle|Small|Medium|Large|LeftOf|RightOf|AboveOf|BelowOf)\b\(+(?<btn1>[a-w])+(,?)+((?<btn2>[a-w])?)+\)");
-            //MatchCollection items = re1.Matches(s);
             foreach(Match item in re.Matches(s))
             {
                 string res;
@@ -349,30 +349,20 @@ namespace TarkisW
                     res = typeof(Function)
                         .GetMethod(item.Groups[1].ToString(), new Type[] { typeof(string) })
                         .Invoke(null, new object[] { item.Groups["btn1"].ToString() }).ToString();
-                    MessageBox.Show(res);
+                    //MessageBox.Show(res);
                 }
                 else
                 {
                     res = typeof(Function)
                         .GetMethod(item.Groups[1].ToString(), new Type[] { typeof(string) , typeof(string) })
                         .Invoke(null, new object[] { item.Groups["btn1"].ToString() , item.Groups["btn2"].ToString() }).ToString();
-                    MessageBox.Show(res);
+                    //MessageBox.Show(res);
                 }
                 s = s.Replace(item.ToString(), res);
-                //s.Replace(item.ToString(), res);
-                MessageBox.Show(s);
-                //MessageBox.Show(res);
+                
             }
-            //while (s != null) {
-            //    if (Match item == re1.Matches(s))
-            //        { 
-            //        Arr.Add(item.ToString());
-            //        s = s.Replace(item.ToString(), "");
-            //        MessageBox.Show(s);
-            //    }
-            //}
-            //MessageBox.Show(s);
-            //MessageBox.Show(strAry[1].ToString());
+            String post = Function.Infix_To_Postfix(s);
+            MessageBox.Show(Function.evaluatePostfix(post));
         }
 
         private void LeftOfbtn_Click(object sender, EventArgs e)
