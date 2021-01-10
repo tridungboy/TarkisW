@@ -12,6 +12,7 @@ namespace TarkisW
         private Panel[,] _board;
         private const int tileSize = 80;
         private const int gridSize = 5;
+        private char[] operators = new char[] { '¬', '∧', '∨', '→', '↔' };
 
         TextBox selTB = null;
         Panel selPN = null;
@@ -338,10 +339,10 @@ namespace TarkisW
             //label3.Text = Function.Triangle().ToString(); 
             //label4.Text = Function.RightOf("a", "b").ToString();
             //List<string> Arr = new List<string>();
-            //String s = "(Square(a) ∧ Small(b) ∨ LeftOf(a,b))";
-            String s = textBox1.Text;
+            String s = "(Square(a) ∧ Small(b) ∨ LeftOf(a,b))";
+            //String s = textBox1.Text;
             Regex re = new Regex(@"\b(Square|Circle|Triangle|Small|Medium|Large|LeftOf|RightOf|AboveOf|BelowOf)\b\(+(?<btn1>[a-w])+(,?)+((?<btn2>[a-w])?)+\)");
-            foreach(Match item in re.Matches(s))
+            foreach (Match item in re.Matches(s))
             {
                 string res;
                 if (item.Groups["btn2"].ToString() == "")
@@ -354,12 +355,11 @@ namespace TarkisW
                 else
                 {
                     res = typeof(Function)
-                        .GetMethod(item.Groups[1].ToString(), new Type[] { typeof(string) , typeof(string) })
-                        .Invoke(null, new object[] { item.Groups["btn1"].ToString() , item.Groups["btn2"].ToString() }).ToString();
+                        .GetMethod(item.Groups[1].ToString(), new Type[] { typeof(string), typeof(string) })
+                        .Invoke(null, new object[] { item.Groups["btn1"].ToString(), item.Groups["btn2"].ToString() }).ToString();
                     //MessageBox.Show(res);
                 }
                 s = s.Replace(item.ToString(), res);
-                
             }
             String post = Function.Infix_To_Postfix(s);
             MessageBox.Show(Function.evaluatePostfix(post));

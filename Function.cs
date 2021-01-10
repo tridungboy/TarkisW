@@ -317,7 +317,7 @@ namespace TarkisW
                             while (stk.Count > 0 && (_out = stk.Peek()) != '(')
                             {
                                 stk.Pop();
-                                output = output + " " + _out + " ";
+                                output = output + " " + _out;
                             }
                             if (stk.Count > 0 && (_out = stk.Peek()) == '(')
                                 stk.Pop();
@@ -365,42 +365,63 @@ namespace TarkisW
         public static string evaluatePostfix(string exp)
         {
             // create a stack  
-            Stack<string> stack = new Stack<string>();
+            Stack<String> stk = new Stack<String>();
+            string output = string.Empty;
 
-            // Scan all characters one by one  
-            for (int i = 0; i < exp.Length; i++)
+            foreach (var ch in exp)
             {
-                char c = exp[i];
-                bool isAlphaBet = Regex.IsMatch(c.ToString(), "[a-z]", RegexOptions.IgnoreCase);
-                if (c == ' ')
+                if (char.IsWhiteSpace(ch))
                 {
+                    if (!string.IsNullOrEmpty(output))
+                    {
+                        stk.Push(output);
+                        output = string.Empty;
+                    }
+
                     continue;
                 }
 
-                // If the scanned character is an   
-                // operand (number here),extract  
-                // the number. Push it to the stack.  
-                
-                //if (Char.IsDigit(ch) || isAlphaBet)
-                else if (char.IsDigit(c) || isAlphaBet)
+                bool isAlphaBet = Regex.IsMatch(ch.ToString(), "[a-z]", RegexOptions.IgnoreCase);
+
+                if (isAlphaBet)
                 {
-                    string n = "";
-
-                    // extract the characters and  
-                    // store it in num  
-                    while (char.IsDigit(c) || isAlphaBet)
-                    {
-                        n = n + c;
-                        i++;
-                        c = exp[i];
-                    }
-                    //i--;
-
-                    // push the number in stack  
-                    stack.Push(n);
+                    output = output + ch;
                 }
+                else if (!isAlphaBet)
+                {
+                    stk.Push(ch.ToString());
+                }
+                else
+                {
+                    bool val1 = bool.Parse(stk.Pop());
+                    bool val2 = bool.Parse(stk.Pop());
+                    switch (ch)
+                    {
+                        case '¬':
+                            
+                            stk.Push(Not(val1).ToString());
+                            break;
+                        case '∧':
+                            
+                            stk.Push(And(val1,val2).ToString());
+                            break;
+                        case '∨':
+                            
+                            stk.Push(Or(val1, val2).ToString());
+                            break;
+                        case '→':
+                            
+                            stk.Push(Implies(val1, val2).ToString());
+                            break;
+                        case '↔':
+                            
+                            stk.Push(Bicon(val1, val2).ToString());
+                            break;
+                    }
+                }
+
             }
-            return stack.Peek();
+            return stk.Pop();
         }
     }
 }
