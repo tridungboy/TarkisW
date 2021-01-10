@@ -119,6 +119,7 @@ namespace TarkisW
             }
         }
 
+        //ditmemay
         //Random
         private void btnRnd_Click(object sender, EventArgs e)
         {
